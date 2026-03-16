@@ -2703,6 +2703,24 @@ DOMContentLoaded.addEventOrExecute(() => {
 
                     setTimeout(function(){
                         jQueryNuvem(".js-alert-added-to-cart").show().addClass("notification-visible").removeClass("notification-hidden");
+
+                        {# Open cart modal - Fly cart #}
+                        setTimeout(function(){
+                            var modal_id = '#modal-cart';
+                            var $overlay_id = jQueryNuvem('.js-modal-overlay[data-modal-id="' + modal_id + '"]');
+
+                            if(!jQueryNuvem(".js-modal.modal-show").length){
+                                jQueryNuvem("body").addClass("overflow-none move-right");
+                            }
+
+                            jQueryNuvem(modal_id).detach().appendTo("body");
+                            jQueryNuvem(modal_id).show().addClass("modal-show");
+                            $overlay_id.fadeIn(400);
+                            $overlay_id.detach().insertBefore(modal_id);
+
+                            {# Hide notification when modal opens #}
+                            jQueryNuvem(".js-alert-added-to-cart").removeClass("notification-visible").addClass("notification-hidden");
+                        }, 300);
                     },500);
 
                     if (!cookieService.get('first_product_added_successfully')) {
@@ -2756,7 +2774,7 @@ DOMContentLoaded.addEventOrExecute(() => {
                     addedToCartCopy,
                     '{{ "Agregando..." | translate }}',
                     '{{ "No hay más stock de este producto." | translate }}',
-                    {{ store.editable_ajax_cart_enabled ? 'true' : 'false' }},
+                    true,
                         callback_add_to_cart,
                         callback_error
                 );
